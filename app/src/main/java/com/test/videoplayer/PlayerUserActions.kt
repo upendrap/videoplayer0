@@ -7,4 +7,5 @@ interface PlayerUserActions {
     fun onPause(elapsedTime: Int = 0, userPaused: Boolean = true)
     fun onStop()
     fun confirmAlert(isAlert: Boolean)
+    fun onDeviceFlipped(faceUp: Boolean, elapsedTime: Int)
 }

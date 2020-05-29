@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(),
                     }
                 }
             })
-        lifecycle.addObserver(DeviceFlipDetector(applicationContext,this))
+        lifecycle.addObserver(DeviceFlipDetector(applicationContext, this))
     }
 
     override fun onStart() {
@@ -90,14 +90,17 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun play() {
+        playerControlsView.setIsPlaying(isPlaying = true)
         videoView.start()
     }
 
     private fun stop() {
+        playerControlsView.setIsPlaying(isPlaying = false)
         videoView.stopPlayback()
     }
 
     private fun pause() {
+        playerControlsView.setIsPlaying(isPlaying = false)
         videoView.pause()
     }
 
@@ -113,7 +116,7 @@ class MainActivity : AppCompatActivity(),
         AlertnessCheckDialog().show(supportFragmentManager, AlertnessCheckDialog::class.java.name)
     }
 
-    override fun onDeviceFlipped() {
-        playerViewModel.onPause()
+    override fun onDeviceFlipped(faceUp: Boolean) {
+        playerViewModel.onDeviceFlipped(faceUp = faceUp, elapsedTime = videoView.currentPosition)
     }
 }

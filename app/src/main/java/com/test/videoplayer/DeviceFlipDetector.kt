@@ -6,7 +6,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -65,10 +64,9 @@ class DeviceFlipDetector(
                 //if the absolute difference between z accelerations is > 12
                 //9.8- -9.8 ~20
                 //-9.8 - 9.8 ~20
-                //picking 20 as seems accurate enough on OPO
+                //picking 12 as seems accurate enough on OPO
                 if (abs(lastZVal - currentZVal) > 12) {
-                    Log.e("check", "${abs(lastZVal - currentZVal)}")
-                    deviceFlipListener.onDeviceFlipped()
+                    deviceFlipListener.onDeviceFlipped(lastZVal < 0)
                     //this data becomes reference for next comparisons
                     lastEvent = EventData(
                         TimeUnit.NANOSECONDS.toSeconds(event?.timestamp ?: 0),
@@ -83,5 +81,5 @@ class DeviceFlipDetector(
 private data class EventData(val seconds: Long, val z: Float)
 
 interface DeviceFlipListener {
-    fun onDeviceFlipped()
+    fun onDeviceFlipped(faceUp: Boolean)
 }

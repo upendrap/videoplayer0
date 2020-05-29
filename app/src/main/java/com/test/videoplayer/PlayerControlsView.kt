@@ -1,14 +1,10 @@
 package com.test.videoplayer
 
 import android.content.Context
-import android.os.Bundle
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.customview.view.AbsSavedState
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_player_controls.*
 import kotlinx.android.synthetic.main.layout_player_controls.view.*
 
 class PlayerControlsView @JvmOverloads constructor(
@@ -74,6 +70,10 @@ class PlayerControlsView @JvmOverloads constructor(
 
     private fun stop() {
         btnPlayPause.setImageResource(R.drawable.exo_controls_play)
+    }
+
+    fun setIsPlaying(isPlaying: Boolean) {
+        this.isPlaying = isPlaying
     }
 
     interface ActionListener {
