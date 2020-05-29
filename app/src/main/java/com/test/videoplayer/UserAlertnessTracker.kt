@@ -7,14 +7,15 @@ import kotlinx.coroutines.launch
 
 class UserAlertnessTracker {
     private lateinit var job: Job
-    fun startPlaying(scope: CoroutineScope, listener: UserAlertness.AlertnessCheck) {
+
+    fun playbackStarted(scope: CoroutineScope, listener: UserAlertness.AlertnessCheck) {
         job = scope.launch {
             delay(AWARENESS_TIMEOUT)
             listener.check()
         }
     }
 
-    fun stopPlaying() {
+    fun playbackPaused() {
         job.cancel()
     }
 }

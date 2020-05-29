@@ -76,11 +76,6 @@ class PlayerControlsView @JvmOverloads constructor(
         btnPlayPause.setImageResource(R.drawable.exo_controls_play)
     }
 
-    companion object {
-        private const val IS_PLAYING = "is_playing"
-        private const val IS_PAUSED = "is_paused"
-    }
-
     interface ActionListener {
         fun onPlayPressed()
         fun onPausePressed()

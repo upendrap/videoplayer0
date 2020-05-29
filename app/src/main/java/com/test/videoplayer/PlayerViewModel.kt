@@ -12,7 +12,8 @@ const val AWARENESS_TIMEOUT = 10_000L
 
 class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlertnessTracker()) :
     ViewModel(),
-    PlayerUserActions, UserAlertness.AlertnessCheck {
+    PlayerUserActions,
+    UserAlertness.AlertnessCheck {
     var mCurrentPosition = 1
     private var isPlaying: Boolean = false
     private var isPaused: Boolean = false
@@ -36,11 +37,11 @@ class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlert
         mutableLiveData.postValue(PlayerViewActions.Play(elapsedTime = mCurrentPosition))
         isPlaying = true
         isPaused = false
-        userAlertnessTracker.startPlaying(scope = viewModelScope, listener = this)
+        userAlertnessTracker.playbackStarted(scope = viewModelScope, listener = this)
     }
 
     override fun onPause(elapsedTime: Int, userPaused: Boolean) {
-        userAlertnessTracker.stopPlaying()
+        userAlertnessTracker.playbackPaused()
         if (userPaused) {
             isPlaying = false
             isPaused = true
@@ -50,7 +51,7 @@ class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlert
     }
 
     override fun onStop() {
-        userAlertnessTracker.stopPlaying()
+        userAlertnessTracker.playbackPaused()
         isPlaying = false
         isPaused = false
         isInitialized = false

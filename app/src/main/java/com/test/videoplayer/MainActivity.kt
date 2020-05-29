@@ -2,11 +2,15 @@ package com.test.videoplayer
 
 import android.content.DialogInterface
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(),
     PlayerControlsView.ActionListener,
@@ -97,6 +101,13 @@ class MainActivity : AppCompatActivity(),
 
     private fun checkAlertness() {
         playerViewModel.onPause(elapsedTime = videoView.currentPosition)
+        (getSystemService(VIBRATOR_SERVICE) as Vibrator)?.run {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrate(VibrationEffect.createOneShot(300, 100));
+            } else {
+                vibrate(300);
+            }
+        }
         AlertnessCheckDialog().show(supportFragmentManager, AlertnessCheckDialog::class.java.name)
     }
 }
