@@ -15,7 +15,7 @@ class UserAlertnessTracker {
         }
     }
 
-    fun playbackPaused() {
+    fun playbackStopped() {
         job?.cancel()
         job = null
     }

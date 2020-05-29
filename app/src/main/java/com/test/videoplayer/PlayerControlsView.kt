@@ -61,15 +61,15 @@ class PlayerControlsView @JvmOverloads constructor(
     }
 
     private fun play() {
-        btnPlayPause.setImageResource(R.drawable.exo_icon_pause)
+        btnPlayPause.setImageResource(R.drawable.ic_pause)
     }
 
     private fun pause() {
-        btnPlayPause.setImageResource(R.drawable.exo_controls_play)
+        btnPlayPause.setImageResource(R.drawable.ic_play)
     }
 
     private fun stop() {
-        btnPlayPause.setImageResource(R.drawable.exo_controls_play)
+        btnPlayPause.setImageResource(R.drawable.ic_play)
     }
 
     fun setIsPlaying(isPlaying: Boolean) {

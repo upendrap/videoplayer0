@@ -1,5 +1,6 @@
 package com.test.videoplayer
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,20 +9,28 @@ import androidx.lifecycle.viewModelScope
 //seconds
 const val AWARENESS_TIMEOUT = 60_000L
 
-class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlertnessTracker()) :
+class PlayerViewModel(private val userAlertnessTracker: UserAlertnessTracker = UserAlertnessTracker()) :
     ViewModel(),
     PlayerUserActions,
     UserAlertnessCheck {
-    private var mCurrentPosition = 1
-    private var isPlaying: Boolean = false
-    private var isPaused: Boolean = false
-    private var isInitialized: Boolean = false
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var elapsedTimeMilliseconds = 1
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var isPlaying: Boolean = false
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var isPaused: Boolean = false
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var isInitialized: Boolean = false
+
     private val mutableLiveData =
         MutableLiveData<PlayerViewActions>()
     val playerViewActions: LiveData<PlayerViewActions> = mutableLiveData
 
     override fun start() {
-        mutableLiveData.postValue(PlayerViewActions.Initialize(elapsedTime = mCurrentPosition))
+        mutableLiveData.postValue(PlayerViewActions.Initialize(elapsedTime = elapsedTimeMilliseconds))
     }
 
     override fun initialize() {
@@ -31,7 +40,7 @@ class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlert
     }
 
     override fun onPlay() {
-        mutableLiveData.postValue(PlayerViewActions.Play(elapsedTime = mCurrentPosition))
+        mutableLiveData.postValue(PlayerViewActions.Play(elapsedTime = elapsedTimeMilliseconds))
         isPlaying = true
         isPaused = false
         userAlertnessTracker.playbackStarted(scope = viewModelScope, listener = this)
@@ -39,22 +48,23 @@ class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlert
 
     override fun onPause(elapsedTime: Int, userPaused: Boolean) {
         if (isPlaying) {
-            userAlertnessTracker.playbackPaused()
+            userAlertnessTracker.playbackStopped()
+            //when device orientation changes we want playback to resume so dont update
             if (userPaused) {
                 isPlaying = false
                 isPaused = true
             }
-            mCurrentPosition = elapsedTime
+            elapsedTimeMilliseconds = elapsedTime
             mutableLiveData.postValue(PlayerViewActions.Pause)
         }
     }
 
     override fun onStop() {
-        userAlertnessTracker.playbackPaused()
+        userAlertnessTracker.playbackStopped()
         isPlaying = false
         isPaused = false
         isInitialized = false
-        mCurrentPosition = 1
+        elapsedTimeMilliseconds = 1
         mutableLiveData.postValue(PlayerViewActions.Stop)
     }
 
