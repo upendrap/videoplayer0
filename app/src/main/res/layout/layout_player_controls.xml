@@ -6,15 +6,15 @@
 
     <ImageButton
         android:id="@+id/btnPlayPause"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
+        android:layout_width="@dimen/dimen_48"
+        android:layout_height="@dimen/dimen_48"
+        android:layout_margin="@dimen/dimen_8"
         android:src="@drawable/ic_play" />
 
     <ImageButton
         android:id="@+id/btnStop"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
+        android:layout_width="@dimen/dimen_48"
+        android:layout_height="@dimen/dimen_48"
+        android:layout_margin="@dimen/dimen_8"
         android:src="@drawable/ic_stop" />
 </LinearLayout>
