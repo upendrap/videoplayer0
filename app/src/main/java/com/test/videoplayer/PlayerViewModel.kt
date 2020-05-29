@@ -11,7 +11,7 @@ const val AWARENESS_TIMEOUT = 60_000L
 class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlertnessTracker()) :
     ViewModel(),
     PlayerUserActions,
-    UserAlertness.AlertnessCheck {
+    UserAlertnessCheck {
     private var mCurrentPosition = 1
     private var isPlaying: Boolean = false
     private var isPaused: Boolean = false

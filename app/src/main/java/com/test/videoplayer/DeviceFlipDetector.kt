@@ -61,6 +61,7 @@ class DeviceFlipDetector(
             if (currentEventTime - lastEvent!!.seconds > 2) {
                 val lastZVal = lastEvent?.z ?: 0.0f
                 val currentZVal = event?.values?.get(2) ?: 0.0f
+                //picking z as z is the axis coming out of screen outward +
                 //if the absolute difference between z accelerations is > 12
                 //9.8- -9.8 ~20
                 //-9.8 - 9.8 ~20

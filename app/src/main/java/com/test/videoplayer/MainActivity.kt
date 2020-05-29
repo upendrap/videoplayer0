@@ -9,8 +9,8 @@ import android.os.Vibrator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.test.videoplayer.PlayerViewActions.*
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity(),
     PlayerControlsView.ActionListener,
@@ -24,20 +24,20 @@ class MainActivity : AppCompatActivity(),
         playerViewModel.playerViewActions.observe(this,
             Observer<PlayerViewActions> { t ->
                 when (t) {
-                    is PlayerViewActions.Initialize -> {
+                    is Initialize -> {
                         initializePlayer(t)
                     }
-                    is PlayerViewActions.Play -> {
+                    is Play -> {
                         play()
                     }
-                    is PlayerViewActions.Pause -> {
+                    is Pause -> {
                         pause()
                     }
-                    is PlayerViewActions.Stop -> {
+                    is Stop -> {
                         stop()
                         playerViewModel.start()
                     }
-                    is PlayerViewActions.AlertnessCheck -> {
+                    is AlertnessCheck -> {
                         checkAlertness()
                     }
                 }
@@ -68,25 +68,13 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun initializePlayer(initialize: PlayerViewActions.Initialize) {
+    private fun initializePlayer(initialize: Initialize) {
         videoView.setVideoURI(Uri.parse("android.resource://$packageName/raw/vid"))
 
         videoView.setOnPreparedListener {
             videoView.seekTo(initialize.elapsedTime)
             playerViewModel.initialize()
         }
-    }
-
-    override fun onPlayPressed() {
-        playerViewModel.onPlay()
-    }
-
-    override fun onPausePressed() {
-        playerViewModel.onPause(elapsedTime = videoView.currentPosition)
-    }
-
-    override fun onStopPressed() {
-        playerViewModel.onStop()
     }
 
     private fun play() {
@@ -116,7 +104,22 @@ class MainActivity : AppCompatActivity(),
         AlertnessCheckDialog().show(supportFragmentManager, AlertnessCheckDialog::class.java.name)
     }
 
+    //USER INPUTS_______________BEGIN
+    override fun onPlayPressed() {
+        playerViewModel.onPlay()
+    }
+
+    override fun onPausePressed() {
+        playerViewModel.onPause(elapsedTime = videoView.currentPosition)
+    }
+
+    override fun onStopPressed() {
+        playerViewModel.onStop()
+    }
+    //USER INPUTS_______________END
+
     override fun onDeviceFlipped(faceUp: Boolean) {
         playerViewModel.onDeviceFlipped(faceUp = faceUp, elapsedTime = videoView.currentPosition)
     }
+
 }

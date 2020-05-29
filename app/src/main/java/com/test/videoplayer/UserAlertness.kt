@@ -1,7 +1,5 @@
 package com.test.videoplayer
 
-interface UserAlertness {
-    interface AlertnessCheck {
-        fun check()
-    }
+interface UserAlertnessCheck {
+    fun check()
 }
