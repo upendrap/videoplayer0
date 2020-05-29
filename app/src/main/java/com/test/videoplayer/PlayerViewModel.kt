@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import java.util.*
 
 //seconds
-const val AWARENESS_TIMEOUT = 10_000L
+const val AWARENESS_TIMEOUT = 30_000L
 
 class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlertnessTracker()) :
     ViewModel(),
@@ -41,13 +41,15 @@ class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlert
     }
 
     override fun onPause(elapsedTime: Int, userPaused: Boolean) {
-        userAlertnessTracker.playbackPaused()
-        if (userPaused) {
-            isPlaying = false
-            isPaused = true
+        if (isPlaying) {
+            userAlertnessTracker.playbackPaused()
+            if (userPaused) {
+                isPlaying = false
+                isPaused = true
+            }
+            mCurrentPosition = elapsedTime
+            mutableLiveData.postValue(PlayerViewActions.Pause)
         }
-        mCurrentPosition = elapsedTime
-        mutableLiveData.postValue(PlayerViewActions.Pause)
     }
 
     override fun onStop() {
@@ -57,7 +59,6 @@ class PlayerViewModel(val userAlertnessTracker: UserAlertnessTracker = UserAlert
         isInitialized = false
         mCurrentPosition = 1
         mutableLiveData.postValue(PlayerViewActions.Stop)
-        start()
     }
 
     override fun confirmAlert(isAlert: Boolean) {

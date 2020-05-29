@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),
     PlayerControlsView.ActionListener,
-    DialogInterface.OnClickListener {
+    DialogInterface.OnClickListener, DeviceFlipListener {
     private val playerViewModel: PlayerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,12 +35,14 @@ class MainActivity : AppCompatActivity(),
                     }
                     is PlayerViewActions.Stop -> {
                         stop()
+                        playerViewModel.start()
                     }
                     is PlayerViewActions.AlertnessCheck -> {
                         checkAlertness()
                     }
                 }
             })
+        lifecycle.addObserver(DeviceFlipDetector(applicationContext,this))
     }
 
     override fun onStart() {
@@ -109,5 +111,9 @@ class MainActivity : AppCompatActivity(),
             }
         }
         AlertnessCheckDialog().show(supportFragmentManager, AlertnessCheckDialog::class.java.name)
+    }
+
+    override fun onDeviceFlipped() {
+        playerViewModel.onPause()
     }
 }

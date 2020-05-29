@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class UserAlertnessTracker {
-    private lateinit var job: Job
+    private var job: Job? = null
 
     fun playbackStarted(scope: CoroutineScope, listener: UserAlertness.AlertnessCheck) {
         job = scope.launch {
@@ -16,6 +16,7 @@ class UserAlertnessTracker {
     }
 
     fun playbackPaused() {
-        job.cancel()
+        job?.cancel()
+        job = null
     }
 }
